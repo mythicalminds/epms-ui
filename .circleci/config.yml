@@ -18,6 +18,11 @@ jobs:
         - ~/.m2
         key: v1-dependencies-{{ checksum "pom.xml" }}
     - run: mvn integration-test
-    - run: curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
-    - run: sudo dpkg -i cf-cli_amd64.deb
-    - run: cf -v
+    #- run: curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
+    #- run: sudo dpkg -i cf-cli_amd64.deb
+    #- run: cf -v
+    - run: cf api https://api.run.pivotal.io
+    - run: cf auth girija.behera@siemens.com S!emens123^
+    - run: cf target -o Siemens-EPMS -s staging
+    - run: cf a
+    - run: cf push
