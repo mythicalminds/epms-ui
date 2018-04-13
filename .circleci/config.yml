@@ -23,5 +23,5 @@ jobs:
           mkdir /tmp/artifacts;
           
     - store_artifacts:
-          path: epms-ui.jar
+          path: ~/repo/epms-ui.jar
           destination:  /tmp/artifacts
