@@ -8,6 +8,11 @@ jobs:
       MAVEN_OPTS: -Xmx3200m
     steps:
     - checkout
+    - dependencies:
+        pre:
+        - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
+        - sudo dpkg -i cf-cli_amd64.deb
+        - cf -v
     - restore_cache:
         keys:
         - v1-dependencies-{{ checksum "pom.xml" }}
