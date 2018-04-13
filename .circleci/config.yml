@@ -12,11 +12,20 @@ jobs:
         keys:
         - v1-dependencies-{{ checksum "pom.xml" }}
         - v1-dependencies-
-    - run: mvn dependency:go-offline
+    - run: mvn package
     - save_cache:
         paths:
         - ~/.m2
         key: v1-dependencies-{{ checksum "pom.xml" }}
+    - run: 
+        name: Create epms-ui jar
+        command: |
+          mkdir /tmp/artifacts;
+          
+    - store_artifacts:
+          path: /tmp/artifacts
+          destination: epms-ui.jar
+          
     #- run: mvn integration-test
     - run: curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
     - run: sudo dpkg -i cf-cli_amd64.deb
