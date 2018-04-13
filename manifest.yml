@@ -1,0 +1,4 @@
+---
+applications:
+- name: my-app
+buildpack: https://github.com/cloudfoundry/java-buildpack
