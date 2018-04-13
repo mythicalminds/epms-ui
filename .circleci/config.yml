@@ -1,18 +1,37 @@
-dependencies:
-  pre:
-    - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
-    - sudo dpkg -i cf-cli_amd64.deb
-    - cf -v
-
-test:
-  post:
-    - cf api https://api.run.pivotal.io
-    - cf auth girija.behera@siemens.com S!emens123^
-    - cf target -o girija.behera@siemens.com -s development
-    - cf a
-
-deployment:
-  production:
-    branch: master
-    commands:
-      - cf push
+version: 2
+jobs:
+  build:
+    docker:
+    - image: circleci/openjdk:8-jdk
+    working_directory: ~/repo
+    environment:
+      MAVEN_OPTS: -Xmx3200m
+    steps:
+    - checkout
+    - restore_cache:
+        keys:
+        - v1-dependencies-{{ checksum "pom.xml" }}
+        - v1-dependencies-
+    - run: mvn dependency:go-offline
+    - save_cache:
+        paths:
+        - ~/.m2
+        key: v1-dependencies-{{ checksum "pom.xml" }}
+    - run: mvn integration-test
+    - deploy:
+        dependencies:
+          pre:
+          - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
+          - sudo dpkg -i cf-cli_amd64.deb
+          - cf -v
+        test:
+          post:
+          - cf api https://api.run.pivotal.io
+          - cf auth girija.behera@siemens.com S!emens123^
+          - cf target -o Siemens-EPMS -s staging
+          - cf a
+        deployment:
+          production:
+            branch: master
+            commands:
+            - cf push
