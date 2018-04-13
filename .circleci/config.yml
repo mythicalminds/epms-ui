@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
     - image: circleci/openjdk:8-jdk
-    working_directory: ~/repo
+    working_directory: /tmp
     environment:
       MAVEN_OPTS: -Xmx3200m
     steps:
@@ -17,11 +17,12 @@ jobs:
         paths:
         - ~/.m2
         key: v1-dependencies-{{ checksum "pom.xml" }}
-    - run: 
+    - run:
         name: Create epms-ui jar
         command: |
           mkdir /tmp/artifacts;
-          
     - store_artifacts:
-          path: ~/repo/epms-ui.jar
-          destination:  /tmp/artifacts
+        path: /tmp/artifact-1
+        destination: artifact-file
+    - store_artifacts:
+        path: /tmp/artifacts
