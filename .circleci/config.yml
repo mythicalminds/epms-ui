@@ -17,12 +17,12 @@ jobs:
         - v1-dependencies-{{ checksum "pom.xml" }}
         - v1-dependencies-
     - run: mvn install
-    #- run:
-        #name: Uploading jar to CF
-        #command: curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'; sudo dpkg -i cf-cli_amd64.deb; cf -v; cf api https://api.run.pivotal.io; cf auth girija.behera@siemens.com S!emens123^; cf target -o Siemens-EPMS -s staging; cf a; cf push epms-ui -p ~/repo/target/epms-ui-0.0.1-SNAPSHOT.jar;
     - store_artifacts:
         path: ~/repo/target/epms-ui-0.0.1-SNAPSHOT.jar
         destination: /tmp/artifacts/epms-ui-0.0.1-SNAPSHOT.jar
+    - run:
+        name: Uploading jar to CF
+        command: curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'; sudo dpkg -i cf-cli_amd64.deb; cf -v; cf api https://api.run.pivotal.io; cf auth girija.behera@siemens.com S!emens123^; cf target -o Siemens-EPMS -s staging; cf a; cf push epms-ui -p /tmp/artifacts/epms-ui-0.0.1-SNAPSHOT.jar;
     - save_cache:
         paths:
         - ~/.m2
